@@ -37,7 +37,7 @@ SECRET_KEY = os.environ.get(
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['.onrender.com', 'localhost', '127.0.0.1']
+ALLOWED_HOSTS = ['library-management-system-a5b7.onrender.com', 'localhost', '127.0.0.1']
 
 
 # Application definition
