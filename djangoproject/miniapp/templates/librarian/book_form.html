@@ -1,0 +1,13 @@
+{% extends 'librarian/base.html' %}
+{% block title %}{{ page_title }}{% endblock %}
+{% block content %}
+<div class="card" style="max-width:520px;">
+    <h2>{{ page_title }}</h2>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button class="btn btn-primary" type="submit">Save</button>
+        <a href="{% url 'librarian_book_list' %}" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>
+{% endblock %}

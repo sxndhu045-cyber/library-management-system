@@ -1,0 +1,13 @@
+{% extends 'librarian/base.html' %}
+{% block title %}Mark Returned{% endblock %}
+{% block content %}
+<div class="card" style="max-width:480px;">
+    <h2>Mark "{{ record.book.title }}" as returned?</h2>
+    <p>Copy #{{ record.copy.copy_number }} will be freed up for other students.</p>
+    <form method="post">
+        {% csrf_token %}
+        <button class="btn btn-primary" type="submit">Yes, mark returned</button>
+        <a href="{% url 'librarian_issue_requests' %}" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>
+{% endblock %}

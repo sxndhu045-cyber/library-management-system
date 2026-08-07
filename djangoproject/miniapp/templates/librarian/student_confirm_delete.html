@@ -1,0 +1,20 @@
+{% extends 'librarian/base.html' %}
+{% block title %}Delete student{% endblock %}
+{% block content %}
+<div class="card" style="max-width:480px;">
+    <h2>Delete "{{ student.full_name }}"?</h2>
+    {% if active_count %}
+    <p style="color:var(--warn-text);">
+        This student has {{ active_count }} active issue(s)/reservation(s) and cannot be deleted until those are resolved.
+    </p>
+    <a href="{% url 'librarian_student_list' %}" class="btn btn-secondary">Back</a>
+    {% else %}
+    <p>This removes their login and full request history. This cannot be undone.</p>
+    <form method="post">
+        {% csrf_token %}
+        <button class="btn btn-danger" type="submit">Yes, delete</button>
+        <a href="{% url 'librarian_student_list' %}" class="btn btn-secondary">Cancel</a>
+    </form>
+    {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,14 @@
+{% extends 'librarian/base.html' %}
+{% block title %}Change due date{% endblock %}
+{% block content %}
+<div class="card" style="max-width:480px;">
+    <h2>Change due date for "{{ record.book.title }}"</h2>
+    <p>Currently issued to {{ record.user.username }}.</p>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button class="btn btn-primary" type="submit">Save</button>
+        <a href="{% url 'librarian_request_history' %}" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>
+{% endblock %}

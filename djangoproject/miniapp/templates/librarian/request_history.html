@@ -1,0 +1,42 @@
+{% extends 'librarian/base.html' %}
+{% block title %}Request History{% endblock %}
+{% block content %}
+<h2>Request History</h2>
+
+<form method="get" style="margin-bottom:16px; display:flex; gap:8px; flex-wrap:wrap;">
+    <input type="text" name="q" placeholder="Search student ID, name, or book" value="{{ query }}" style="width:280px; max-width:100%; padding:8px; border-radius:2px;">
+    <button class="btn btn-secondary" type="submit">Search</button>
+</form>
+
+<table>
+    <tr>
+        <th>Student ID</th>
+        <th>Student Name</th>
+        <th>Book</th>
+        <th>Status</th>
+        <th>Issue Date</th>
+        <th>Due Date</th>
+        <th>Return Date</th>
+        <th>Actions</th>
+    </tr>
+    {% for record in records %}
+    <tr>
+        <td data-label="Student ID">{{ record.user.student.student_id }}</td>
+        <td data-label="Student Name">{{ record.user.student.full_name }}</td>
+        <td data-label="Book">{{ record.book.title }}</td>
+        <td data-label="Status"><span class="badge badge-{{ record.status }}">{{ record.get_status_display }}</span></td>
+        <td data-label="Issue Date">{{ record.issue_date|default:"—" }}</td>
+        <td data-label="Due Date">{{ record.due_date|default:"—" }}</td>
+        <td data-label="Return Date">{{ record.return_date|default:"—" }}</td>
+        <td data-label="Actions">
+            {% if record.status == 'issued' %}
+            <a href="{% url 'librarian_mark_returned' record.pk %}" class="btn btn-primary">Mark Returned</a>
+            <a href="{% url 'librarian_edit_due_date' record.pk %}" class="btn btn-secondary">Change due date</a>
+            {% endif %}
+        </td>
+    </tr>
+    {% empty %}
+    <tr><td colspan="8">No history yet.</td></tr>
+    {% endfor %}
+</table>
+{% endblock %}

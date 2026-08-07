@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{% block title %}Home{% endblock %} - Library Management System</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:wght@600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --paper: #F6F1E7;
+            --card: #FFFDF8;
+            --ink: #2B2419;
+            --line: #D8CBB0;
+            --muted: #7A6B52;
+            --eyebrow: #8A6D4A;
+            --good-border: #6B7F5E;
+            --good-text: #4A5C3E;
+            --warn-border: #A05C42;
+            --warn-text: #7A4531;
+        }
+
+        body {
+            background: var(--paper);
+            color: var(--ink);
+            font-family: 'Inter', -apple-system, sans-serif;
+        }
+
+        h1, h2, h3, h4, h5, .serif {
+            font-family: 'Source Serif 4', Georgia, serif;
+            font-weight: 700;
+            letter-spacing: 0.01em;
+        }
+
+        header {
+            background: var(--paper) !important;
+            border-bottom: 2px solid var(--ink) !important;
+            padding: 20px 32px !important;
+        }
+
+        header a { color: var(--ink); }
+
+        .eyebrow {
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--eyebrow);
+            font-weight: 500;
+            margin-bottom: 10px;
+        }
+
+        /* Buttons: ink-filled or thin-outline, no default Bootstrap blue */
+        .btn {
+            border-radius: 2px;
+            font-weight: 500;
+            box-shadow: none !important;
+            font-family: 'Inter', sans-serif;
+        }
+        .btn-primary {
+            background: var(--ink);
+            border-color: var(--ink);
+            color: var(--paper);
+        }
+        .btn-primary:hover, .btn-primary:focus {
+            background: #453B29;
+            border-color: #453B29;
+            color: var(--paper);
+        }
+        .btn-outline-secondary, .btn-secondary {
+            background: transparent;
+            color: var(--ink);
+            border: 1.5px solid var(--ink);
+        }
+        .btn-outline-secondary:hover, .btn-secondary:hover {
+            background: var(--ink);
+            color: var(--paper);
+            border-color: var(--ink);
+        }
+        .btn-warning {
+            background: transparent;
+            border: 1.5px solid var(--warn-border);
+            color: var(--warn-text);
+        }
+        .btn-warning:hover {
+            background: var(--warn-border);
+            color: var(--card);
+            border-color: var(--warn-border);
+        }
+        .btn-link { color: var(--ink); text-decoration: none; font-weight: 500; }
+        .btn-link:hover { color: var(--warn-text); }
+
+        /* Cards: cream card stock, no shadow, hairline border */
+        .card {
+            background: var(--card);
+            border: 1px solid var(--line);
+            border-radius: 3px;
+            box-shadow: none;
+        }
+        .card:hover { border-color: var(--ink); }
+        .card-title { font-family: 'Source Serif 4', Georgia, serif; font-size: 18px; }
+        .card-text { color: var(--muted); }
+
+        /* Stamp-style availability tags replace flat badges */
+        .badge {
+            font-family: 'Inter', sans-serif;
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 0.04em;
+            padding: 3px 10px;
+            border-radius: 2px;
+            transform: rotate(-3deg);
+            display: inline-block;
+        }
+        .badge.bg-success {
+            background: transparent !important;
+            border: 1.5px solid var(--good-border);
+            color: var(--good-text) !important;
+        }
+        .badge.bg-danger {
+            background: transparent !important;
+            border: 1.5px solid var(--warn-border);
+            color: var(--warn-text) !important;
+            transform: rotate(3deg);
+        }
+
+        table { border-color: var(--line) !important; }
+        .table-bordered th, .table-bordered td { border-color: var(--line); }
+        .table th { font-weight: 600; background: transparent; font-family: 'Inter', sans-serif; font-size: 13px; text-transform: uppercase; letter-spacing: 0.04em; color: var(--muted); }
+
+        .alert { border-radius: 3px; border: 1px solid var(--line); background: var(--card); }
+
+        .form-control {
+            border: 1.5px solid var(--line);
+            border-radius: 2px;
+            background: var(--card);
+        }
+        .form-control:focus {
+            border-color: var(--ink);
+            box-shadow: none;
+        }
+    </style>
+</head>
+<body>
+<header class="d-flex justify-content-between align-items-center">
+    <h1 class="h4 mb-0"><a href="{% url 'homepage' %}" class="text-decoration-none serif">The Library</a></h1>
+    <nav class="d-flex align-items-center gap-2">
+        {% if user.is_authenticated %}
+            {% if user.is_staff %}
+                <a href="{% url 'librarian_book_list' %}" class="btn btn-outline-secondary btn-sm">Librarian dashboard</a>
+            {% else %}
+                <a href="{% url 'profile' %}" class="btn btn-outline-secondary btn-sm">My profile</a>
+            {% endif %}
+            <form method="post" action="{% url 'logout' %}" class="d-inline">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-link btn-sm">Log out</button>
+            </form>
+        {% else %}
+            <a href="{% url 'login' %}" class="btn btn-primary btn-sm">Log in</a>
+        {% endif %}
+    </nav>
+</header>
+
+<main class="container my-4">
+    {% if messages %}
+    <ul class="list-unstyled">
+        {% for message in messages %}
+        <li class="alert alert-{{ message.tags }}">{{ message }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+    {% block content %}{% endblock %}
+</main>
+</body>
+</html>

@@ -1,0 +1,17 @@
+{% extends "layout.html" %}
+
+{% block title %}Request Issue - {{ book.title }}{% endblock %}
+
+{% block content %}
+<div class="card" style="max-width:480px;">
+    <div class="card-body">
+        <h4>Request to issue "{{ book.title }}"?</h4>
+        <p>A librarian will review and approve your request. You'll see it in your profile once approved.</p>
+        <form method="post">
+            {% csrf_token %}
+            <button class="btn btn-primary" type="submit">Send request</button>
+            <a href="{% url 'book_detail' id=book.id %}" class="btn btn-secondary">Cancel</a>
+        </form>
+    </div>
+</div>
+{% endblock %}

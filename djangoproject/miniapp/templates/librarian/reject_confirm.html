@@ -1,0 +1,13 @@
+{% extends 'librarian/base.html' %}
+{% block title %}Reject Request{% endblock %}
+{% block content %}
+<div class="card" style="max-width:480px;">
+    <h2>Reject request for "{{ record.book.title }}"?</h2>
+    <p>{{ record.user.username }} will need to submit a new request if they still want this book.</p>
+    <form method="post">
+        {% csrf_token %}
+        <button class="btn btn-danger" type="submit">Yes, reject</button>
+        <a href="{% url 'librarian_issue_requests' %}" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>
+{% endblock %}

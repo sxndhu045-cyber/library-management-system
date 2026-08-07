@@ -1,0 +1,13 @@
+{% extends 'librarian/base.html' %}
+{% block title %}Approve Request{% endblock %}
+{% block content %}
+<div class="card" style="max-width:480px;">
+    <h2>Approve issue for "{{ record.book.title }}"?</h2>
+    <p>This will assign an available copy to {{ record.user.username }} and mark it as issued.</p>
+    <form method="post">
+        {% csrf_token %}
+        <button class="btn btn-primary" type="submit">Yes, approve</button>
+        <a href="{% url 'librarian_issue_requests' %}" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>
+{% endblock %}

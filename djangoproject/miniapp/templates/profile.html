@@ -1,0 +1,56 @@
+{% extends "layout.html" %}
+
+{% block title %}My Profile{% endblock %}
+
+{% block content %}
+<h2 class="serif">My profile</h2>
+
+<div class="card mb-4">
+    <div class="card-body">
+        <p class="mb-1"><strong>Student ID:</strong> {{ student.student_id }}</p>
+        <p class="mb-1"><strong>Name:</strong> {{ student.full_name }}</p>
+        <p class="mb-0"><strong>Contact:</strong> {{ student.contact|default:"—" }}</p>
+    </div>
+</div>
+
+<div class="eyebrow">Currently issued</div>
+<table class="table table-bordered mb-4">
+    <tr><th>Book</th><th>Issue date</th><th>Due date</th></tr>
+    {% for record in current_issued %}
+    <tr>
+        <td><a href="{% url 'book_detail' id=record.book.id %}" class="text-decoration-none">{{ record.book.title }}</a></td>
+        <td>{{ record.issue_date }}</td>
+        <td>{{ record.due_date }}</td>
+    </tr>
+    {% empty %}
+    <tr><td colspan="3">No books currently issued.</td></tr>
+    {% endfor %}
+</table>
+
+<div class="eyebrow">Reserved</div>
+<table class="table table-bordered mb-4">
+    <tr><th>Book</th><th>Requested on</th></tr>
+    {% for record in reserved %}
+    <tr>
+        <td><a href="{% url 'book_detail' id=record.book.id %}" class="text-decoration-none">{{ record.book.title }}</a></td>
+        <td>{{ record.requested_at }}</td>
+    </tr>
+    {% empty %}
+    <tr><td colspan="2">No active reservations.</td></tr>
+    {% endfor %}
+</table>
+
+<div class="eyebrow">Past issued books</div>
+<table class="table table-bordered">
+    <tr><th>Book</th><th>Issue date</th><th>Returned</th></tr>
+    {% for record in past_issued %}
+    <tr>
+        <td>{{ record.book.title }}</td>
+        <td>{{ record.issue_date }}</td>
+        <td>{{ record.return_date }}</td>
+    </tr>
+    {% empty %}
+    <tr><td colspan="3">No past issue history yet.</td></tr>
+    {% endfor %}
+</table>
+{% endblock %}

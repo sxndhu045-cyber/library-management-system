@@ -1,0 +1,18 @@
+{% extends 'librarian/base.html' %}
+{% block title %}{{ page_title }}{% endblock %}
+{% block content %}
+<div class="card" style="max-width:480px;">
+    <h2>{{ page_title }}</h2>
+    {% if not is_edit %}
+    <p style="color:var(--muted); font-size:14px;">
+        This creates their login. Give them the student ID and password directly &mdash; there's no sign-up page.
+    </p>
+    {% endif %}
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button class="btn btn-primary" type="submit">{% if is_edit %}Save{% else %}Create account{% endif %}</button>
+        <a href="{% url 'librarian_student_list' %}" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>
+{% endblock %}

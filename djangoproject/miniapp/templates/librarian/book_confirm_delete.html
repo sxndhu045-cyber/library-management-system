@@ -1,0 +1,13 @@
+{% extends 'librarian/base.html' %}
+{% block title %}Delete book{% endblock %}
+{% block content %}
+<div class="card" style="max-width:480px;">
+    <h2>Delete "{{ book.title }}"?</h2>
+    <p>This will also remove all {{ book.total_copies }} copies of this book. This cannot be undone.</p>
+    <form method="post">
+        {% csrf_token %}
+        <button class="btn btn-danger" type="submit">Yes, delete</button>
+        <a href="{% url 'librarian_book_list' %}" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>
+{% endblock %}

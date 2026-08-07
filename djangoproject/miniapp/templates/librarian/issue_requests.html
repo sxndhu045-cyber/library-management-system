@@ -1,0 +1,31 @@
+{% extends 'librarian/base.html' %}
+{% block title %}Issue Requests{% endblock %}
+{% block content %}
+<h2>Issue Requests</h2>
+
+<table>
+    <tr>
+        <th>Student</th>
+        <th>Book</th>
+        <th>Status</th>
+        <th>Requested</th>
+        <th>Actions</th>
+    </tr>
+    {% for record in requests %}
+    <tr>
+        <td data-label="Student">{{ record.user.username }}</td>
+        <td data-label="Book">{{ record.book.title }}</td>
+        <td data-label="Status"><span class="badge badge-{{ record.status }}">{{ record.get_status_display }}</span></td>
+        <td data-label="Requested">{{ record.requested_at|date:"Y-m-d" }}</td>
+        <td data-label="Actions">
+            {% if record.status == 'requested' or record.status == 'reserved' %}
+            <a href="{% url 'librarian_approve_request' record.pk %}" class="btn btn-primary">Approve</a>
+            <a href="{% url 'librarian_reject_request' record.pk %}" class="btn btn-danger">Reject</a>
+            {% endif %}
+        </td>
+    </tr>
+    {% empty %}
+    <tr><td colspan="5">No pending requests.</td></tr>
+    {% endfor %}
+</table>
+{% endblock %}

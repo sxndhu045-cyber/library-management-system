@@ -1,0 +1,64 @@
+{% extends "layout.html" %}
+
+{% block title %}
+Home
+{% endblock %}
+
+{% block content %}
+
+<div class="container mt-4">
+
+  <form method="get" class="mb-4 d-flex" style="max-width:480px;">
+    <input type="text" name="q" class="form-control me-2" placeholder="Search by title, author, or category" value="{{ query }}">
+    <button class="btn btn-primary" type="submit">Search</button>
+  </form>
+
+  <div class="eyebrow">On the shelf</div>
+  <h4 class="mb-3">Available books</h4>
+  <div class="row row-cols-2 row-cols-md-4 row-cols-lg-5 g-3 mb-5 ">
+    {% for book in available_books %}
+    <div class="col">
+      <a href="{% url 'book_detail' id=book.id %}" class="text-decoration-none text-dark">
+        <div class="card h-100">
+          {% if book.photo %}
+          <img src="{{ book.photo.url }}" class="card-img-top" alt="{{ book.title }}">
+          {% endif %}
+          <div class="card-body">
+            <h5 class="card-title">{{ book.title }}</h5>
+            <p class="card-text mb-2">by {{ book.author }}</p>
+            <span class="badge bg-success">{{ book.available_copies }} of {{ book.total_copies }} available</span>
+          </div>
+        </div>
+      </a>
+    </div>
+    {% empty %}
+    <p class="card-text">No available books match your search.</p>
+    {% endfor %}
+  </div>
+
+  <div class="eyebrow">Checked out</div>
+  <h4 class="mb-3">Archived / issued books</h4>
+  <div class="row row-cols-2 row-cols-md-4 row-cols-lg-5 g-3 mb-5">
+    {% for book in archived_books %}
+    <div class="col">
+      <a href="{% url 'book_detail' id=book.id %}" class="text-decoration-none text-dark">
+        <div class="card h-100">
+          {% if book.photo %}
+          <img src="{{ book.photo.url }}" class="card-img-top" alt="{{ book.title }}" style="filter:grayscale(0.6);opacity:0.85;">
+          {% endif %}
+          <div class="card-body">
+            <h5 class="card-title">{{ book.title }}</h5>
+            <p class="card-text mb-2">by {{ book.author }}</p>
+            <span class="badge bg-danger">All {{ book.total_copies }} copies checked out</span>
+          </div>
+        </div>
+      </a>
+    </div>
+    {% empty %}
+    <p class="card-text">No archived/issued books match your search.</p>
+    {% endfor %}
+  </div>
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,42 @@
+{% extends 'librarian/base.html' %}
+{% block title %}Books{% endblock %}
+{% block content %}
+<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; flex-wrap:wrap; gap:10px;">
+    <form method="get" style="display:flex; gap:8px; flex-wrap:wrap;">
+        <input type="text" name="q" placeholder="Search title, author, ISBN" value="{{ query }}" style="width:280px; max-width:100%; padding:8px; border-radius:2px;">
+        <button class="btn btn-secondary" type="submit">Search</button>
+    </form>
+    <a href="{% url 'librarian_book_add' %}" class="btn btn-primary">+ Add book</a>
+</div>
+
+<table>
+    <tr>
+        <th>Title</th>
+        <th>Author</th>
+        <th>ISBN</th>
+        <th>Borrowed</th>
+        <th>Available</th>
+        <th>Actions</th>
+    </tr>
+    {% for book in books %}
+    <tr>
+        <td data-label="Title">{{ book.title }}</td>
+        <td data-label="Author">{{ book.author }}</td>
+        <td data-label="ISBN">{{ book.isbn }}</td>
+        <td data-label="Borrowed">{{ book.issued_copies }}</td>
+        <td data-label="Available">
+            <span>{{ book.available_copies }}</span>
+            {% if book.available_copies == 0 %}
+            <span class="low-stock-flag" title="Out of stock">&#9888;</span>
+            {% endif %}
+        </td>
+        <td data-label="Actions">
+            <a href="{% url 'librarian_book_edit' book.pk %}" class="btn btn-secondary">Edit</a>
+            <a href="{% url 'librarian_book_delete' book.pk %}" class="btn btn-danger">Delete</a>
+        </td>
+    </tr>
+    {% empty %}
+    <tr><td colspan="6">No books found.</td></tr>
+    {% endfor %}
+</table>
+{% endblock %}

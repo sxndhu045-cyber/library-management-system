@@ -1,0 +1,58 @@
+{% extends "layout.html" %}
+
+{% block title %}
+{{ book.title }}
+{% endblock %}
+
+{% block content %}
+
+<div class="container mt-4">
+
+    <div class="card">
+        <div class="row g-0">
+            {% if book.photo %}
+            <div class="col-md-4">
+                <img src="{{ book.photo.url }}" class="img-fluid" alt="{{ book.title }}" style="border-radius:3px 0 0 3px;">
+            </div>
+            {% endif %}
+            <div class="col-md-8">
+                <div class="card-body">
+
+                    <h2 class="serif">{{ book.title }}</h2>
+
+                    <p><strong>Author:</strong> {{ book.author }}</p>
+                    <p><strong>ISBN:</strong> {{ book.isbn }}</p>
+                    <p><strong>Category:</strong> {{ book.category|default:"—" }}</p>
+                    <p><strong>Shelf location:</strong> {{ book.shelf_location|default:"—" }}</p>
+                    <p><strong>Pages:</strong> {{ book.pages }}</p>
+
+                    <p>
+                        <strong>Availability:</strong>
+                        {% if book.available_copies > 0 %}
+                        <span class="badge bg-success">{{ book.available_copies }} of {{ book.total_copies }} copies available</span>
+                        {% else %}
+                        <span class="badge bg-danger">All {{ book.total_copies }} copies checked out</span>
+                        {% endif %}
+                    </p>
+
+                    <p><strong>Summary:</strong></p>
+                    <p>{{ book.summary }}</p>
+
+                    {% if user.is_authenticated and not user.is_staff %}
+                        {% if book.available_copies > 0 %}
+                        <a href="{% url 'request_issue' pk=book.pk %}" class="btn btn-primary">Request to issue</a>
+                        {% else %}
+                        <a href="{% url 'reserve_book' pk=book.pk %}" class="btn btn-warning">Reserve</a>
+                        {% endif %}
+                    {% elif not user.is_authenticated %}
+                        <a href="{% url 'login' %}" class="btn btn-outline-secondary">Log in to reserve or request this book</a>
+                    {% endif %}
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+{% endblock %}
