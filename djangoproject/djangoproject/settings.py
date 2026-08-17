@@ -56,8 +56,8 @@ INSTALLED_APPS = [
 
 CLOUDINARY_STORAGE = {
     'CLOUD_NAME': os.environ.get('CLOUDINARY_CLOUD_NAME'),
-    'API_KEY': os.environ.get('767943266786186'),
-    'API_SECRET': os.environ.get('i4AehfkNptA3wq2Uqmq8TRiq0Z0'),
+    'API_KEY': os.environ.get('CLOUDINARY_API_KEY'),
+    'API_SECRET': os.environ.get('CLOUDINARY_API_SECRET'),
 }
 
 # Django 4.2+ / 6.0 unified storage config.
